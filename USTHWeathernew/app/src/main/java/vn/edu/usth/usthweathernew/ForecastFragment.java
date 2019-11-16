@@ -1,26 +1,14 @@
 package vn.edu.usth.usthweathernew;
 
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-
-import android.text.InputType;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-
-import java.lang.reflect.Field;
 import java.util.Random;
 
 
@@ -29,7 +17,7 @@ import java.util.Random;
  */
 public class ForecastFragment extends Fragment {
 
-    private final String date[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    private String date[] = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
     private Integer[] imageArray = {
             R.drawable.bitcloudy,
             R.drawable.bitsnow,
@@ -45,7 +33,7 @@ public class ForecastFragment extends Fragment {
             R.drawable.sunny,
             R.drawable.thunder};
 
-    private final String weather[] = {
+    private String weather[] = {
             "A bit cloudy",
             "A bit snow",
             "Cloudy",
@@ -66,108 +54,35 @@ public class ForecastFragment extends Fragment {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
-
-        ScrollView scrollView = new ScrollView(getActivity());
-        LinearLayout llvertical = new LinearLayout(getActivity());
-        llvertical.setOrientation(LinearLayout.VERTICAL);
-        llvertical.setPadding(10, 10, 10, 10);
-        llvertical.setBackgroundResource(R.drawable.gradient);
+        LinearLayout llvertical = view.findViewById(R.id.linear_layout);
 
         int i;
-        Random randImage = new Random();
+        Random r = new Random();
+        String temperature;
 
         for (i = 0; i < 30; i++) {
-            int input = randImage.nextInt(imageArray.length);
-            llvertical.addView(addLinearLayoutHorizontal(date[i % 7], input));
+            View view1 = inflater.inflate(R.layout.row, container, false);
+            int rInt = r.nextInt(13);
+
+            TextView txt1 = view1.findViewById(R.id.text1);
+            txt1.setText(date[i % 7]);
+
+            ImageView img = view1.findViewById(R.id.weather_icon);
+            img.setImageResource(imageArray[rInt]);
+
+            /*random description and temperature*/
+            temperature = (10 + rInt) + "\u00B0C" + " - " + (20 + rInt) + "\u00B0C";
+            if (weather[rInt].contains("snow"))
+                temperature = "5\u00B0C - 7\u00B0C";
+
+            TextView txt2 = view1.findViewById(R.id.text2);
+            txt2.setText(weather[rInt] + "\n" + temperature);
+
+            llvertical.addView(view1);
         }
-        scrollView.setVerticalScrollBarEnabled(true);
-        scrollView.setHorizontalScrollBarEnabled(false);
-        scrollView.setSmoothScrollingEnabled(true);
-        scrollView.addView(llvertical);
-        return scrollView;
+        return view;
     }
-
-
-    private LinearLayout addLinearLayoutHorizontal(String date, int input) {
-        LinearLayout llhorizontal = new LinearLayout(getActivity());
-        llhorizontal.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 4
-        );
-        llParams.setMargins(10, 10, 10, 10);
-        llhorizontal.setGravity(Gravity.CENTER_VERTICAL);
-        //llhorizontal.setPadding(10, 10, 10, 20);
-        llhorizontal.setLayoutParams(llParams);
-        llhorizontal.addView(addTextView1(date));
-        llhorizontal.addView(addImageView(input));
-        llhorizontal.addView(addTextView2(input));
-        return llhorizontal;
-    }
-
-    private TextView addTextView1(String text) {
-        TextView textView = new TextView(getActivity());
-        textView.setText(text);
-        textView.setTextColor(Color.WHITE);
-        textView.setTextSize(10);
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-        textView.setTypeface(Typeface.DEFAULT_BOLD);
-
-        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                80,
-                80, 1
-
-        );
-        textViewParams.setMargins(10, 10, 10, 10);
-        textView.setLayoutParams(textViewParams);
-        return textView;
-    }
-
-
-    private ImageView addImageView(int input) {
-        ImageView imageView = new ImageView(getActivity());
-        /*Random choose image weather*/
-
-        imageView.setImageResource(imageArray[input]);
-
-        imageView.setScaleType(ImageView.ScaleType.FIT_START);
-        LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(
-                120,
-                80, 1
-
-        );
-        //imageViewParams.weight=1;
-        imageViewParams.setMargins(10, 10, 10, 10);
-        imageView.setLayoutParams(imageViewParams);
-        return imageView;
-    }
-
-    private TextView addTextView2(int input) {
-        TextView textView = new TextView(getActivity());
-        Random r = new Random();
-        int rInt = r.nextInt(10);
-        String temperature = (10 + rInt) + "\u00B0C" + " - " + (20 + rInt) + "\u00B0C";
-        if (weather[input].contains("snow"))
-            temperature = "5\u00B0C - 7\u00B0C";
-        textView.setText(weather[input] + "\n" + temperature);
-        textView.setTextColor(Color.WHITE);
-        textView.setTextSize(10);
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-        textView.setTypeface(Typeface.DEFAULT_BOLD);
-        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                200,
-                80, 2
-        );
-        //textViewParams.weight=1;
-        textViewParams.setMargins(20, 10, 10, 10);
-        textView.setLayoutParams(textViewParams);
-        return textView;
-    }
-
 }
