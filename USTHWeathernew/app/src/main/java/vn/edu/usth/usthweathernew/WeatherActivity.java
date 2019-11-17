@@ -16,10 +16,6 @@ public class WeatherActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_activity);
         Log.i(TAG, "This is onCreate");
-        // Create a new Fragment to be placed in the weather activity
-        ForecastFragment firstFragment = new ForecastFragment();
-        // Add the fragment to the 'container' FrameLayout
-        getSupportFragmentManager().beginTransaction().add(R.id.container, firstFragment).commit();
     }
 
     @Override
