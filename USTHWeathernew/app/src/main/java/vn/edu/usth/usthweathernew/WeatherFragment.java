@@ -39,6 +39,7 @@ public class WeatherFragment extends Fragment {
 
         ImageView image = v.findViewById(R.id.weather_icon2);
         image.setImageResource(weather.getImageId(rInt));
+
         return v;
     }
 

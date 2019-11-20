@@ -6,14 +6,28 @@
     android:background="@drawable/gradient"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:orientation="vertical"
     tools:context=".WeatherActivity">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabBackground="@color/colorTransparent1"
+        app:tabGravity="fill"
+        app:tabTextColor="@color/unselected_color"
+        app:tabIndicatorAnimationDuration="@android:integer/config_shortAnimTime"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabSelectedTextColor="@color/colorAccent"
+        app:tabRippleColor="@color/colorAccent"
+       />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:layout_margin="10dp"/>
 
 </LinearLayout>

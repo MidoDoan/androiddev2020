@@ -9,7 +9,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-public class WeatherActivity extends FragmentActivity {
+//import android.support.design.widget.TabLayout;
+
+import com.google.android.material.tabs.TabLayout;
+
+public class WeatherActivity extends AppCompatActivity {
 
     private static final String TAG = "WeatherActivity";
 
@@ -25,6 +29,10 @@ public class WeatherActivity extends FragmentActivity {
         pager.setPageMargin(15);
         pager.setOffscreenPageLimit(3);
         pager.setAdapter(adapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
+        tabLayout.setupWithViewPager(pager);
+
+
     }
 
     @Override

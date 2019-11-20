@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int PAGE_COUNT = 3;
-    private String titles[] = new String[] { "Hanoi", "Paris", "Toulouse" };
+    private String titles[] = new String[] { "Hanoi", "Tokyo", "Seoul" };
 
     public HomeFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -20,9 +20,9 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int page) {
     // returns an instance of Fragment corresponding to the specified page
         switch (page) {
-            case 0: return WeatherAndForecastFragment.newInstance(0);
-            case 1: return WeatherAndForecastFragment.newInstance(1);
-            case 2: return WeatherAndForecastFragment.newInstance(2);
+            case 0: return WeatherAndForecastFragment.newInstance(0,titles[0]);
+            case 1: return WeatherAndForecastFragment.newInstance(1,titles[1]);
+            case 2: return WeatherAndForecastFragment.newInstance(2,titles[2]);
         }
         return null; // failsafe
     }
