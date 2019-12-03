@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="weather_icon">
+        <item>@drawable/bitcloudy</item>
+        <item>@drawable/bitsnow</item>
+        <item>@drawable/cloudy</item>
+        <item>@drawable/cloudysunny</item>
+        <item>@drawable/drizzle</item>
+        <item>@drawable/heavyrain</item>
+        <item>@drawable/partialsnow</item>
+        <item>@drawable/rainy</item>
+        <item>@drawable/snowy</item>
+        <item>@drawable/storm</item>
+        <item>@drawable/suncloud</item>
+        <item>@drawable/sunny</item>
+        <item>@drawable/thunder</item>
+    </integer-array>
+
+</resources>

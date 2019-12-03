@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">USTH Dự báo thời tiết</string>
+    <string name="bit_cloudy">Trời ít mây</string>
+    <string name="cloudy">Trời nhiều mây</string>
+    <string name="drizzle">Mưa phùn</string>
+    <string name="friday">Thứ Sáu</string>
+    <string name="hanoi">Hà Nội</string>
+    <string name="heavy_rain">Mưa nặng hạt</string>
+    <string name="monday">Thứ Hai</string>
+    <string name="partial_snow">Có tuyết</string>
+    <string name="rainy">Có mưa</string>
+    <string name="saturday">Thứ Bảy</string>
+    <string name="seoul">Seoul</string>
+    <string name="shower_snow">Tuyết rơi nhiều</string>
+    <string name="storm">Có bão</string>
+    <string name="sunday">Chủ Nhật</string>
+    <string name="sunny">Trời nắng đẹp</string>
+    <string name="sunny_bit_cloudy">Trời có nắng và ít mây</string>
+    <string name="sunny_cloudy">Trời có nắng và nhiều mây</string>
+    <string name="thunder_lightning">Sấm sét và chớp</string>
+    <string name="thursday">Thứ Năm</string>
+    <string name="tokyo">Tokyo</string>
+    <string name="tuesday">Thứ Ba</string>
+    <string name="wednesday">Thứ Tư</string>
+    <string name="bit_snow">Tuyết rơi ít</string>
+
+    <string name="snow">tuyết</string>
+</resources>

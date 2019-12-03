@@ -9,9 +9,9 @@
 
     <TextView
         android:id="@+id/text3"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_margin="10dp"
+        android:layout_width="@dimen/weather_size"
+        android:layout_height="@dimen/weather_size"
+        android:layout_margin="@dimen/margin"
         android:gravity="top"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
@@ -27,13 +27,12 @@
 
     <TextView
         android:id="@+id/location"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/weather_size"
+        android:layout_height="@dimen/weather_size"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/margin"
         android:gravity="top|right"
-        android:text="Paris"
         android:textColor="@android:color/white"
         android:textStyle="bold" />
 

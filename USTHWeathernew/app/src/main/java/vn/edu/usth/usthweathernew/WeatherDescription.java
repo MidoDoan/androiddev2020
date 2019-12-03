@@ -1,38 +1,37 @@
 package vn.edu.usth.usthweathernew;
 
+import android.content.Context;
+import android.content.res.TypedArray;
+
 public class WeatherDescription {
-    private Integer[] imageArray = {
-            R.drawable.bitcloudy,
-            R.drawable.bitsnow,
-            R.drawable.cloudy,
-            R.drawable.cloudysunny,
-            R.drawable.drizzle,
-            R.drawable.heavyrain,
-            R.drawable.partialsnow,
-            R.drawable.rainy,
-            R.drawable.snowy,
-            R.drawable.storm,
-            R.drawable.suncloud,
-            R.drawable.sunny,
-            R.drawable.thunder};
+    Context context;
+    int[] imageArray;
 
-    private String weather[] = {
-            "A bit cloudy",
-            "A bit snow",
-            "Cloudy",
-            "Sunny and cloudy",
-            "Drizzle",
-            "Heavy rain",
-            "Partial snow",
-            "Rainy",
-            "Shower snow",
-            "Storm",
-            "Sunny and a bit cloudy",
-            "Sunny",
-            "Thunder and lightning"
-    };
+    public void setResource(Context context) {
+        this.context = context;
+    }
 
-    public Integer[] getImageArray() {
+    private Context getContext() {
+        return context;
+    }
+
+    String[] weather;
+
+    public void setWeather() {
+        weather = getContext().getResources().getStringArray(R.array.weather_description);
+    }
+
+    public void setImageArr() {
+        TypedArray tArray = getContext().getResources().obtainTypedArray(R.array.weather_icon);
+        int count = tArray.length();
+        imageArray = new int[count];
+        for (int i = 0; i < imageArray.length; i++) {
+            imageArray[i] = tArray.getResourceId(i, 0);
+        }
+        tArray.recycle();
+    }
+
+    public int[] getImageArray() {
         return imageArray;
     }
 
@@ -40,27 +39,25 @@ public class WeatherDescription {
         return weather;
     }
 
-//    Random r = new Random();
-//    int rInt = r.nextInt();
-
-    public Integer getImageId(int rInt){
+    public int getImageId(int rInt) {
         return imageArray[rInt];
     }
-    public String getWeather(int rInt){
+
+    public String getWeather(int rInt) {
         return weather[rInt];
     }
 
-    public String getTemperatureRange (int rInt){
-        String temp=(10 + rInt) + "\u00B0C" + " - " + (20 + rInt) + "\u00B0C";
-        if (weather[rInt].contains("snow"))
-            temp= "5\u00B0C - 7\u00B0C";
+    public String getTemperatureRange(int rInt) {
+        String temp = (10 + rInt) + "\u00B0C" + " - " + (20 + rInt) + "\u00B0C";
+        if (weather[rInt].toLowerCase().contains(getContext().getString(R.string.snow)))
+            temp = "5\u00B0C - 7\u00B0C";
         return temp;
     }
 
-    public String getTemperature(int rInt){
-        String temp=(10 + rInt) + "\u00B0C";
-        if (weather[rInt].contains("snow"))
-            temp= "5\u00B0C";
+    public String getTemperature(int rInt) {
+        String temp = (10 + rInt) + "\u00B0C";
+        if (weather[rInt].toLowerCase().contains(getContext().getString(R.string.snow)))
+            temp = "5\u00B0C";
         return temp;
     }
 }

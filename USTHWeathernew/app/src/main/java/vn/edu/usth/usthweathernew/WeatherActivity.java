@@ -23,8 +23,9 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.weather_activity);
         Log.i(TAG, "This is onCreate");
 
-        PagerAdapter adapter = new HomeFragmentPagerAdapter(
+        HomeFragmentPagerAdapter adapter = new HomeFragmentPagerAdapter(
                 getSupportFragmentManager());
+        adapter.setResource(getApplicationContext());
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setPageMargin(15);
         pager.setOffscreenPageLimit(3);

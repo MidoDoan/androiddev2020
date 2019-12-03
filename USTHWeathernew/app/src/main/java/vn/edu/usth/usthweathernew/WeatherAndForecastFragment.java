@@ -1,6 +1,8 @@
 package vn.edu.usth.usthweathernew;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,8 +14,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.Random;
 
 
 /**
@@ -21,21 +27,20 @@ import android.widget.TextView;
  */
 public class WeatherAndForecastFragment extends Fragment {
 
-
     public WeatherAndForecastFragment() {
         // Required empty public constructor
     }
 
+
     // newInstance constructor for creating fragment with arguments
     public static Fragment newInstance(int page, String title) {
-        WeatherAndForecastFragment fragment1= new WeatherAndForecastFragment();
+        WeatherAndForecastFragment fragment1 = new WeatherAndForecastFragment();
         Bundle args = new Bundle();
         args.putInt("page", page);
-        args.putString("title",title);
+        args.putString("title", title);
         fragment1.setArguments(args);
         return fragment1;
     }
-
 
 
     @Override
@@ -43,8 +48,6 @@ public class WeatherAndForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_weather_and_forecast, container, false);
-
-
     }
 
     @Override
@@ -53,7 +56,6 @@ public class WeatherAndForecastFragment extends Fragment {
         Bundle args = getArguments();
         ((TextView) view.findViewById(R.id.location))
                 .setText(args.getString("title"));
+
     }
-
 }
-
