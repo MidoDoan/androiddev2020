@@ -5,6 +5,9 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,6 +40,14 @@ public class WeatherActivity extends AppCompatActivity {
     private String filename = "mikrokomos.mp3";
     private String filepath;
 
+    Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            // This method is executed in main thread
+            String content = msg.getData().getString("server_response");
+            Toast.makeText(getApplicationContext(), content, Toast.LENGTH_SHORT).show();
+        }
+    };
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +67,14 @@ public class WeatherActivity extends AppCompatActivity {
 
         filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/vn.edu.usth.usthweathernew/files/";
         writeExternal();
-        MediaPlayer mediaPlayer= new MediaPlayer();
-        try {
-            mediaPlayer.setDataSource(filepath+filename);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MediaPlayer mediaPlayer= MediaPlayer.create(this,R.raw.mikrokomos);
+//        try {
+//            mediaPlayer.setDataSource(filepath+filename);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         mediaPlayer.start();
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,7 +86,29 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_button:
-                Toast.makeText(this,"Refresh",Toast.LENGTH_SHORT).show();
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // this method is run in a worker thread
+                        try {
+                            // wait for 2 seconds to simulate a long network access
+                            Thread.sleep(2000);
+                        }
+                        catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        // Assume that we got our data from server
+                        Bundle bundle = new Bundle();
+                        bundle.putString("server_response", "some sample json here");
+                        // notify main thread
+                        Message msg = new Message();
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
+                    }
+                });
+                t.start();
+                //Toast.makeText(this,"Refresh",Toast.LENGTH_SHORT).show();
+
                 return true;
             case R.id.action_setting:
                 startActivity(new Intent(WeatherActivity.this, PrefActivity.class));
