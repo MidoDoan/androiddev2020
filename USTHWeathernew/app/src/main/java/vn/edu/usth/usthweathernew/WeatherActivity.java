@@ -1,13 +1,20 @@
 package vn.edu.usth.usthweathernew;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -46,7 +53,7 @@ public class WeatherActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
         tabLayout.setupWithViewPager(pager);
 
-        
+
         filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/vn.edu.usth.usthweathernew/files/";
         writeExternal();
         MediaPlayer mediaPlayer= new MediaPlayer();
@@ -57,6 +64,29 @@ public class WeatherActivity extends AppCompatActivity {
         }
         mediaPlayer.start();
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh_button:
+                Toast.makeText(this,"Refresh",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_setting:
+                startActivity(new Intent(WeatherActivity.this, PrefActivity.class));
+                return true;
+            default:
+                super.onOptionsItemSelected(item);
+                return false;
+        }
+
+    }
+
+
 
     private void writeExternal() {
         try {

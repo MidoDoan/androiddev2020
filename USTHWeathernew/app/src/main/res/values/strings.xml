@@ -60,5 +60,6 @@
     </string-array>
 
     <string name="snow">snow</string>
+    <string name="action_setting">Setting</string>
 
 </resources>
