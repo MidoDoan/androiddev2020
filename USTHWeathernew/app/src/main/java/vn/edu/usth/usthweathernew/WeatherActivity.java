@@ -1,8 +1,10 @@
 package vn.edu.usth.usthweathernew;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -48,6 +50,7 @@ public class WeatherActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), content, Toast.LENGTH_SHORT).show();
         }
     };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +70,7 @@ public class WeatherActivity extends AppCompatActivity {
 
         filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/vn.edu.usth.usthweathernew/files/";
         writeExternal();
-        MediaPlayer mediaPlayer= MediaPlayer.create(this,R.raw.mikrokomos);
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.mikrokomos);
 //        try {
 //            mediaPlayer.setDataSource(filepath+filename);
 //        } catch (IOException e) {
@@ -76,6 +79,7 @@ public class WeatherActivity extends AppCompatActivity {
         mediaPlayer.start();
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -89,26 +93,45 @@ public class WeatherActivity extends AppCompatActivity {
                 Thread t = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        // this method is run in a worker thread
-                        try {
-                            // wait for 2 seconds to simulate a long network access
-                            Thread.sleep(2000);
-                        }
-                        catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        // Assume that we got our data from server
-                        Bundle bundle = new Bundle();
-                        bundle.putString("server_response", "some sample json here");
-                        // notify main thread
-                        Message msg = new Message();
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
+                        AsyncTask<String, Integer, Bitmap> task = new AsyncTask<String, Integer, Bitmap>() {
+                            @Override
+                            protected Bitmap doInBackground(String... strings) {
+                                try {
+                                    // wait for 2 seconds to simulate a long network access
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                return null;
+                            }
+
+                            @Override
+                            protected void onPreExecute() {
+                                super.onPreExecute();
+                            }
+
+                            @Override
+                            protected void onPostExecute(Bitmap bitmap) {
+                                super.onPostExecute(bitmap);
+                                // Assume that we got our data from server
+                                Bundle bundle = new Bundle();
+                                bundle.putString("server_response", "some sample json here");
+                                // notify main thread
+                                Message msg = new Message();
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
+                            }
+
+                            @Override
+                            protected void onProgressUpdate(Integer... values) {
+                                super.onProgressUpdate(values);
+                            }
+                        };
+                        task.execute();
                     }
                 });
                 t.start();
                 //Toast.makeText(this,"Refresh",Toast.LENGTH_SHORT).show();
-
                 return true;
             case R.id.action_setting:
                 startActivity(new Intent(WeatherActivity.this, PrefActivity.class));
@@ -119,7 +142,6 @@ public class WeatherActivity extends AppCompatActivity {
         }
 
     }
-
 
 
     private void writeExternal() {
