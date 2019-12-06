@@ -2,6 +2,7 @@ package vn.edu.usth.usthweathernew;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +36,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -42,14 +48,6 @@ public class WeatherActivity extends AppCompatActivity {
     private String filename = "mikrokomos.mp3";
     private String filepath;
 
-    Handler handler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            // This method is executed in main thread
-            String content = msg.getData().getString("server_response");
-            Toast.makeText(getApplicationContext(), content, Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,48 +88,34 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_button:
-                Thread t = new Thread(new Runnable() {
+                AsyncTask task = new AsyncTask() {
                     @Override
-                    public void run() {
-                        AsyncTask<String, Integer, Bitmap> task = new AsyncTask<String, Integer, Bitmap>() {
-                            @Override
-                            protected Bitmap doInBackground(String... strings) {
-                                try {
-                                    // wait for 2 seconds to simulate a long network access
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                return null;
-                            }
-
-                            @Override
-                            protected void onPreExecute() {
-                                super.onPreExecute();
-                            }
-
-                            @Override
-                            protected void onPostExecute(Bitmap bitmap) {
-                                super.onPostExecute(bitmap);
-                                // Assume that we got our data from server
-                                Bundle bundle = new Bundle();
-                                bundle.putString("server_response", "some sample json here");
-                                // notify main thread
-                                Message msg = new Message();
-                                msg.setData(bundle);
-                                handler.sendMessage(msg);
-                            }
-
-                            @Override
-                            protected void onProgressUpdate(Integer... values) {
-                                super.onProgressUpdate(values);
-                            }
-                        };
-                        task.execute();
+                    protected Object doInBackground(Object[] objects) {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
                     }
-                });
-                t.start();
-                //Toast.makeText(this,"Refresh",Toast.LENGTH_SHORT).show();
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                    }
+
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        super.onPostExecute(o);
+                        Toast.makeText(getApplicationContext(), "Refresh", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Object[] values) {
+                        super.onProgressUpdate(values);
+                    }
+                };
+                task.execute();
                 return true;
             case R.id.action_setting:
                 startActivity(new Intent(WeatherActivity.this, PrefActivity.class));
