@@ -44,9 +44,21 @@ import java.net.URL;
 public class WeatherActivity extends AppCompatActivity {
 
     private static final String TAG = "WeatherActivity";
+    HomeFragmentPagerAdapter adapter;
+    ViewPager pager;
     private File file;
     private String filename = "mikrokomos.mp3";
     private String filepath;
+
+    URL url;
+
+    {
+        try {
+            url = new URL("https://ictlab.usth.edu.vn/wp-content/uploads/logos/usth.png");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
@@ -55,10 +67,10 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.weather_activity);
         Log.i(TAG, "This is onCreate");
 
-        HomeFragmentPagerAdapter adapter = new HomeFragmentPagerAdapter(
+        adapter = new HomeFragmentPagerAdapter(
                 getSupportFragmentManager());
         adapter.setResource(getApplicationContext());
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) findViewById(R.id.pager);
         pager.setPageMargin(15);
         pager.setOffscreenPageLimit(3);
         pager.setAdapter(adapter);
@@ -88,15 +100,48 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh_button:
-                AsyncTask task = new AsyncTask() {
+                AsyncTask<String,Integer,Bitmap> task = new AsyncTask<String,Integer,Bitmap>() {
+                    Bitmap bitmap;
+                    HttpURLConnection connection;
                     @Override
-                    protected Object doInBackground(Object[] objects) {
+                    protected Bitmap doInBackground(String... strings) {
                         try {
                             Thread.sleep(2000);
+                            connection = (HttpURLConnection) url.openConnection();
+                            connection.setRequestMethod("GET");
+                            connection.setDoInput(true);
+                            connection.connect();
+                            int response = connection.getResponseCode();
+                            Log.i("USTHWeather", "The response is: " + response);
+                            InputStream is = connection.getInputStream();
+                            bitmap = BitmapFactory.decodeStream(is);
+
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                        } catch (ProtocolException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        return null;
+                        connection.disconnect();
+                        return bitmap;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Bitmap bitmap) {
+                        Toast.makeText(getApplicationContext(),"Refresh", Toast.LENGTH_SHORT).show();
+                        for(int i=0;i<3;i++){
+                        WeatherAndForecastFragment weatherAndForecastFragment = (WeatherAndForecastFragment) adapter.instantiateItem(pager, i);
+                        ForecastFragment forecastFragment = (ForecastFragment) weatherAndForecastFragment.getChildFragmentManager().findFragmentById(R.id.scroll);
+                        ImageView logo = (ImageView) forecastFragment.getView().findViewById(R.id.symbol);
+                        logo.setImageBitmap(bitmap);
+                        }
+
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        super.onProgressUpdate(values);
                     }
 
                     @Override
@@ -104,16 +149,6 @@ public class WeatherActivity extends AppCompatActivity {
                         super.onPreExecute();
                     }
 
-                    @Override
-                    protected void onPostExecute(Object o) {
-                        super.onPostExecute(o);
-                        Toast.makeText(getApplicationContext(), "Refresh", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    protected void onProgressUpdate(Object[] values) {
-                        super.onProgressUpdate(values);
-                    }
                 };
                 task.execute();
                 return true;
